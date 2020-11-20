@@ -1,9 +1,9 @@
 import Phaser, { Game } from "phaser";
-import Background from "./scenes/background";
+import Background from "./scenes/Background";
 
 const canvas = document.getElementById("game-canvas");
 const config = {
-  type: Phaser.AUTO,
+  type: Phaser.WEB_GL,
   width: 800,
   height: 600,
   canvas,

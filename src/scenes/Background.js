@@ -10,6 +10,6 @@ export default class Background extends Phaser.Scene {
   }
 
   create() {
-    this.add.image(-160, 0, "sky").setOrigin(0).setScale(1);
+    this.add.image(-160, 0, "sky").setOrigin(0).setScale(2);
   }
 }
