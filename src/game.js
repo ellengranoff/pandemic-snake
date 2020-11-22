@@ -12,10 +12,7 @@ const config = {
   },
 };
 
-let snake;
-let cursors;
-let toiletpaper;
-let scoreText;
+let snake, covid, cursors, toiletpaper, scoreText;
 let score = 0;
 
 //  Direction consts
@@ -30,6 +27,8 @@ function preload() {
   this.load.image("toiletpaper", "assets/toiletpaper.png");
   this.load.image("map", "assets/usmap.jpeg");
   this.load.image("face", "assets/maskface.png");
+  this.load.image("covid", "assets/covid.png");
+  this.load.audio("bling", "assets/audio/bling.wav");
 }
 
 function create() {
@@ -38,7 +37,7 @@ function create() {
     fontSize: "32px",
     color: "red",
   });
-  var ToiletPaper = new Phaser.Class({
+  let ToiletPaper = new Phaser.Class({
     Extends: Phaser.GameObjects.Image,
     initialize: function ToiletPaper(scene, x, y) {
       Phaser.GameObjects.Image.call(this, scene);
@@ -54,14 +53,32 @@ function create() {
       let x = Phaser.Math.Between(0, 42);
       let y = Phaser.Math.Between(0, 20);
       this.setPosition(x * 21, y * 21);
-      console.log(this);
+    },
+  });
+  let Covid = new Phaser.Class({
+    Extends: Phaser.GameObjects.Image,
+    initialize: function Covid(scene, x, y) {
+      Phaser.GameObjects.Image.call(this, scene);
+      this.setTexture("covid");
+      this.setPosition(x * 20, y * 20);
+      this.setOrigin(0);
+      this.setScale(0.06);
+      this.total = 0;
+      scene.children.add(this);
+    },
+    outbreak: function () {
+      if (score % 5 === 0) {
+        this.total++;
+        let x = Phaser.Math.Between(0, 42);
+        let y = Phaser.Math.Between(0, 20);
+        this.setPosition(x * 21, y * 21);
+      }
     },
   });
   let Snake = new Phaser.Class({
     initialize: function Snake(scene, x, y) {
       this.headPosition = new Phaser.Geom.Point(x, y);
       this.body = scene.add.group();
-      console.log(this.body);
       this.head = this.body.create(x * 21, y * 21, "face").setScale(0.05);
       this.head.setOrigin(0);
       this.tail = new Phaser.Geom.Point(x, y);
@@ -148,32 +165,44 @@ function create() {
         this.tail
       );
 
-      this.moveTime = time + this.speed;
+      var deadSnake = Phaser.Actions.GetFirst(
+        //gets all snake children to compare with the value of the head
+        this.body.getChildren(),
+        { x: this.head.x, y: this.head.y },
+        1
+      );
 
-      return true;
+      if (deadSnake) {
+        this.alive = false;
+        alert(`GAME OVER! Your Score Was: ${score}`);
+      } else {
+        this.moveTime = time + this.speed;
+        return true;
+      }
     },
     grow: function () {
       let newPart = this.body.create(this.tail.x, this.tail.y, "face");
       newPart.setScale(0.05);
       newPart.setOrigin(0);
     },
-    collideWithFood: function (toiletpaper) {
+    collideWithFood: function (toiletpaper, covid) {
       let differenceX = Math.abs(this.head.x - toiletpaper.x);
       let differenceY = Math.abs(this.head.y - toiletpaper.y);
       if (differenceX < 5 && differenceY < 5) {
         score++;
-        console.log("BANG");
         this.grow();
         toiletpaper.consume();
+        covid.outbreak();
         return true;
       } else {
         return false;
       }
     },
   });
+
   toiletpaper = new ToiletPaper(this, 3, 4);
   snake = new Snake(this, 8, 8);
-
+  covid = new Covid(this, 20, 20);
   cursors = this.input.keyboard.createCursorKeys();
 }
 
@@ -192,6 +221,6 @@ function update(time, delta) {
   }
 
   if (snake.update(time)) {
-    snake.collideWithFood(toiletpaper);
+    snake.collideWithFood(toiletpaper, covid);
   }
 }
