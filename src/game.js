@@ -14,6 +14,7 @@ const config = {
 
 let snake;
 let cursors;
+let toiletpaper;
 
 //  Direction consts
 const UP = 0;
@@ -24,21 +25,40 @@ const RIGHT = 3;
 var game = new Phaser.Game(config);
 
 function preload() {
-  this.load.image("food", "assets/toiletpaper.png");
+  this.load.image("toiletpaper", "assets/toiletpaper.png");
   this.load.image("map", "assets/usmap.jpeg");
   this.load.image("face", "assets/maskface.png");
 }
 
 function create() {
   this.add.image(444, 250, "map").setScale(0.8);
-  var Snake = new Phaser.Class({
+  var ToiletPaper = new Phaser.Class({
+    Extends: Phaser.GameObjects.Image,
+    initialize: function ToiletPaper(scene, x, y) {
+      Phaser.GameObjects.Image.call(this, scene);
+      this.setTexture("toiletpaper");
+      this.setPosition(x * 100, y * 100);
+      this.setOrigin(0);
+      this.setScale(0.08);
+      this.total = 0;
+      scene.children.add(this);
+    },
+    consume: function () {
+      this.total++;
+      let x = Phaser.Math.Between(0, 45);
+      let y = Phaser.Math.Between(0, 22);
+      this.setPosition(x * 20, y * 20);
+    },
+  });
+  let Snake = new Phaser.Class({
     initialize: function Snake(scene, x, y) {
       this.headPosition = new Phaser.Geom.Point(x, y);
       this.body = scene.add.group();
-      this.head = this.body.create(x * 30, y * 30, "face").setScale(0.11);
+      this.head = this.body.create(x * 20, y * 20, "face").setScale(0.07);
       this.head.setOrigin(0);
+      this.tail = new Phaser.Geom.Point(x, y);
       this.alive = true;
-      this.speed = 150;
+      this.speed = 160;
       this.moveTime = 0;
       this.heading = RIGHT;
       this.direction = RIGHT;
@@ -115,16 +135,33 @@ function create() {
         this.body.getChildren(),
         this.headPosition.x * 16,
         this.headPosition.y * 16,
-        1
+        1,
+        this.tail
       );
 
       this.moveTime = time + this.speed;
 
       return true;
     },
+    grow: function () {
+      let newPart = this.body.create(this.tail.x, this.tail.y, "face");
+      newPart.setScale(0.07);
+      newPart.setOrigin(0);
+    },
+    collideWithFood: function (toiletpaper) {
+      let differenceX = Math.abs(this.head.x - toiletpaper.x);
+      let differenceY = Math.abs(this.head.y - toiletpaper.y);
+      if (differenceX < 5 && differenceY < 5) {
+        this.grow();
+        toiletpaper.consume();
+        return true;
+      } else {
+        return false;
+      }
+    },
   });
-
-  snake = new Snake(this, 0, 0);
+  toiletpaper = new ToiletPaper(this, 3, 4);
+  snake = new Snake(this, 8, 8);
 
   cursors = this.input.keyboard.createCursorKeys();
 }
@@ -143,5 +180,7 @@ function update(time, delta) {
     snake.faceDown();
   }
 
-  snake.update(time);
+  if (snake.update(time)) {
+    snake.collideWithFood(toiletpaper);
+  }
 }
