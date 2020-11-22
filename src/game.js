@@ -15,6 +15,8 @@ const config = {
 let snake;
 let cursors;
 let toiletpaper;
+let scoreText;
+let score = 0;
 
 //  Direction consts
 const UP = 0;
@@ -32,6 +34,10 @@ function preload() {
 
 function create() {
   this.add.image(444, 250, "map").setScale(0.8);
+  scoreText = this.add.text(700, 0, "score: 0", {
+    fontSize: "32px",
+    color: "red",
+  });
   var ToiletPaper = new Phaser.Class({
     Extends: Phaser.GameObjects.Image,
     initialize: function ToiletPaper(scene, x, y) {
@@ -67,6 +73,7 @@ function create() {
     },
 
     update: function (time) {
+      scoreText.text = `Score: ${score}`;
       if (time >= this.moveTime) {
         return this.move(time);
       }
@@ -154,6 +161,7 @@ function create() {
       let differenceX = Math.abs(this.head.x - toiletpaper.x);
       let differenceY = Math.abs(this.head.y - toiletpaper.y);
       if (differenceX < 5 && differenceY < 5) {
+        score++;
         console.log("BANG");
         this.grow();
         toiletpaper.consume();
