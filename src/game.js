@@ -37,24 +37,26 @@ function create() {
     initialize: function ToiletPaper(scene, x, y) {
       Phaser.GameObjects.Image.call(this, scene);
       this.setTexture("toiletpaper");
-      this.setPosition(x * 100, y * 100);
+      this.setPosition(x * 20, y * 20);
       this.setOrigin(0);
-      this.setScale(0.08);
+      this.setScale(0.06);
       this.total = 0;
       scene.children.add(this);
     },
     consume: function () {
       this.total++;
-      let x = Phaser.Math.Between(0, 45);
-      let y = Phaser.Math.Between(0, 22);
-      this.setPosition(x * 20, y * 20);
+      let x = Phaser.Math.Between(0, 42);
+      let y = Phaser.Math.Between(0, 20);
+      this.setPosition(x * 21, y * 21);
+      console.log(this);
     },
   });
   let Snake = new Phaser.Class({
     initialize: function Snake(scene, x, y) {
       this.headPosition = new Phaser.Geom.Point(x, y);
       this.body = scene.add.group();
-      this.head = this.body.create(x * 20, y * 20, "face").setScale(0.07);
+      console.log(this.body);
+      this.head = this.body.create(x * 21, y * 21, "face").setScale(0.05);
       this.head.setOrigin(0);
       this.tail = new Phaser.Geom.Point(x, y);
       this.alive = true;
@@ -100,7 +102,7 @@ function create() {
           this.headPosition.x = Phaser.Math.Wrap(
             this.headPosition.x - 1,
             0,
-            55
+            42
           );
           break;
 
@@ -108,7 +110,7 @@ function create() {
           this.headPosition.x = Phaser.Math.Wrap(
             this.headPosition.x + 1,
             0,
-            55
+            42
           );
           break;
 
@@ -116,7 +118,7 @@ function create() {
           this.headPosition.y = Phaser.Math.Wrap(
             this.headPosition.y - 1,
             0,
-            30
+            25
           );
           break;
 
@@ -124,7 +126,7 @@ function create() {
           this.headPosition.y = Phaser.Math.Wrap(
             this.headPosition.y + 1,
             0,
-            30
+            25
           );
           break;
       }
@@ -133,8 +135,8 @@ function create() {
 
       Phaser.Actions.ShiftPosition(
         this.body.getChildren(),
-        this.headPosition.x * 16,
-        this.headPosition.y * 16,
+        this.headPosition.x * 21,
+        this.headPosition.y * 21,
         1,
         this.tail
       );
@@ -145,13 +147,14 @@ function create() {
     },
     grow: function () {
       let newPart = this.body.create(this.tail.x, this.tail.y, "face");
-      newPart.setScale(0.07);
+      newPart.setScale(0.05);
       newPart.setOrigin(0);
     },
     collideWithFood: function (toiletpaper) {
       let differenceX = Math.abs(this.head.x - toiletpaper.x);
       let differenceY = Math.abs(this.head.y - toiletpaper.y);
       if (differenceX < 5 && differenceY < 5) {
+        console.log("BANG");
         this.grow();
         toiletpaper.consume();
         return true;
