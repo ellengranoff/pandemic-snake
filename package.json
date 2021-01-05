@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "12.18.4"
+  },
   "scripts": {
     "start": "webpack serve --mode development --entry ./src/game.js",
     "build": "webpack --mode production --entry ./src/game.js --output ./dist/game.js",
