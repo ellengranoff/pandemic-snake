@@ -7,7 +7,7 @@
     "node": "12.18.4"
   },
   "scripts": {
-    "build": "webpack",
+    "build": "webpack --mode production",
     "start": "npm run build && webpack-dev-server --host=0.0.0.0 --port=$PORT --disable-host-check"
   },
   "author": "Ellen Granoff",
