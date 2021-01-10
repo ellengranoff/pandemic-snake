@@ -2,16 +2,15 @@
   "name": "stackathon",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/game.js",
   "engines": {
     "node": "12.18.4"
   },
   "scripts": {
-    "start": "webpack serve --mode development --entry ./src/game.js",
-    "build": "webpack --mode production --entry ./src/game.js --output ./dist/game.js",
-    "dev": "webpack --mode development --entry ./src/game.js --output ./dist/game.js"
+    "build": "webpack",
+    "start": "npm run build && webpack-dev-server --host=0.0.0.0 --port=$PORT --disable-host-check"
   },
-  "author": "",
+  "author": "Ellen Granoff",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.12.3",
@@ -27,6 +26,8 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
+    "path": "^0.12.7",
     "phaser": "^3.24.1"
-  }
+  },
+  "heroku-run-build-script": true
 }
