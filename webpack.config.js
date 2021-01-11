@@ -1,11 +1,16 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const path = require("path");
 
 module.exports = {
-  entry: "./src/game.js",
+  entry: "./src/index.js",
   output: {
-    path: __dirname,
-    filename: "./dist/bundle.js",
+    path: path.join(__dirname, "dist"),
+    filename: "main.js",
+  },
+  devServer: {
+    // ...
+    watchContentBase: true,
   },
   module: {
     rules: [
