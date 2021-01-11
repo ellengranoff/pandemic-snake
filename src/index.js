@@ -33,7 +33,7 @@ function preload() {
 
 function create() {
   this.add.image(444, 250, "map").setScale(0.8);
-  scoreText = this.add.text(700, 0, "score: 0", {
+  scoreText = this.add.text(700, 0, "the score: 0", {
     fontSize: "32px",
     color: "red",
   });
@@ -90,7 +90,7 @@ function create() {
     },
 
     update: function (time) {
-      scoreText.text = `Score: ${score}`;
+      scoreText.text = `SCORE: ${score}`;
       if (time >= this.moveTime) {
         return this.move(time);
       }
