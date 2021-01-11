@@ -142,7 +142,7 @@ function create() {
           this.headPosition.y = Phaser.Math.Wrap(
             this.headPosition.y - 1,
             0,
-            25
+            24
           );
           break;
 
@@ -150,7 +150,7 @@ function create() {
           this.headPosition.y = Phaser.Math.Wrap(
             this.headPosition.y + 1,
             0,
-            25
+            24
           );
           break;
       }
