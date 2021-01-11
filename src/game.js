@@ -50,8 +50,8 @@ function create() {
     },
     consume: function () {
       this.total++;
-      let x = Phaser.Math.Between(0, 42);
-      let y = Phaser.Math.Between(0, 20);
+      let x = Phaser.Math.Between(0, 41);
+      let y = Phaser.Math.Between(0, 19);
       this.setPosition(x * 21, y * 21);
     },
   });
@@ -66,14 +66,14 @@ function create() {
       this.total = 0;
       scene.children.add(this);
     },
-    outbreak: function () {
-      if (score % 5 === 0) {
-        this.total++;
-        let x = Phaser.Math.Between(0, 42);
-        let y = Phaser.Math.Between(0, 20);
-        this.setPosition(x * 21, y * 21);
-      }
-    },
+    // outbreak: function () {
+    //   if (score % 5 === 0) {
+    //     this.total++;
+    //     let x = Phaser.Math.Between(0, 41);
+    //     let y = Phaser.Math.Between(0, 19);
+    //     this.setPosition(x * 21, y * 21);
+    //   }
+    // },
   });
   let Snake = new Phaser.Class({
     initialize: function Snake(scene, x, y) {
@@ -192,7 +192,7 @@ function create() {
         score++;
         this.grow();
         toiletpaper.consume();
-        covid.outbreak();
+        // covid.outbreak();
         return true;
       } else {
         return false;
@@ -202,7 +202,7 @@ function create() {
 
   toiletpaper = new ToiletPaper(this, 3, 4);
   snake = new Snake(this, 8, 8);
-  covid = new Covid(this, 20, 20);
+  // covid = new Covid(this, 20, 20);
   cursors = this.input.keyboard.createCursorKeys();
 }
 

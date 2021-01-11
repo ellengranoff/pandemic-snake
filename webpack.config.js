@@ -3,6 +3,10 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   entry: "./src/game.js",
+  output: {
+    path: __dirname,
+    filename: "./dist/bundle.js",
+  },
   module: {
     rules: [
       {

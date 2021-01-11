@@ -7,9 +7,10 @@
     "node": "12.18.4"
   },
   "scripts": {
-    "start": "webpack serve --mode development --entry ./src/game.js",
-    "build": "webpack --mode production --entry ./src/game.js --output ./dist/game.js",
-    "dev": "webpack --mode development --entry ./src/game.js --output ./dist/game.js"
+    "start": "npm run start-server & npm run build-watch",
+    "start-server": "nodemon server -w server",
+    "build-watch": "webpack -w",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Ellen Granoff",
   "license": "ISC",
@@ -27,6 +28,7 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
+    "nodemon": "^2.0.7",
     "path": "^0.12.7",
     "phaser": "^3.24.1"
   },
